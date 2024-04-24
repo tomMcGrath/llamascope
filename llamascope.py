@@ -55,6 +55,16 @@ class LlamaScope:
         for module_str in self.activations_cache.keys():
             self.clear_cache(module_str)
 
+    def remove_cache(self, module_str):
+        """Remove the cache for module_str."""
+        del self.activations_cache[module_str]
+
+    def remove_all_caches(self):
+        """Remove all caches."""
+        caches = list(self.activations_cache.keys())
+        for cache_str in caches:
+            self.remove_cache(cache_str)
+
     """Hook clearup"""
     def remove_hook(self, hook_name):
         """Remove a hook with name hook_name from the model."""
