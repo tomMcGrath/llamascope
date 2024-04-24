@@ -63,5 +63,6 @@ class LlamaScope:
 
     def remove_all_hooks(self):
         """Remove all hooks from the model."""
-        for hook_name in self.hooks.keys():
+        hooks = list(self.hooks.keys())
+        for hook_name in hooks:
             self.remove_hook(hook_name)
