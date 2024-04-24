@@ -13,6 +13,7 @@ class LlamaScope:
         self._build_module_dict()
 
 
+    """Module listing."""
     def _build_module_dict(self):
         """Walks the model's module tree and builds a name: module map."""
         self._module_dict = {}
@@ -29,6 +30,13 @@ class LlamaScope:
         """Lists all modules in the module dictionary."""
         return self._module_dict.keys()
     
+    """Generic hook registration"""
+    def add_hook(self, hook_fn, module_str, hook_name):
+        """Add a hook_fn to the module given by module_str."""
+        module = self._module_dict[module_str]
+        hook_handle = module.register_forward_hook(hook_fn)
+        self.hooks[hook_name] = hook_handle
+    
     """Activations caching"""
     def _build_caching_hook(self, module_str):
         self.activations_cache[module_str] = []
@@ -40,9 +48,7 @@ class LlamaScope:
     def add_caching_hook(self, module_str):
         """Adds an activations caching hook at the location in module_str."""
         hook_fn = self._build_caching_hook(module_str)
-        module = self._module_dict[module_str]
-        hook_handle = module.register_forward_hook(hook_fn)
-        self.hooks['cache-'+module_str] = hook_handle
+        self.add_hook(hook_fn, module_str, 'cache-'+module_str)
 
     def clear_cache(self, module_str):
         """Clears the activations cache corresponding to module_str."""
@@ -78,9 +84,7 @@ class LlamaScope:
     def add_override_hook(self, module_str):
         """Adds hook to overrides output of module_str using override_store"""
         hook_fn = self._build_override_hook(module_str)
-        module = self._module_dict[module_str]
-        hook_handle = module.register_forward_hook(hook_fn)
-        self.hooks['override-'+module_str] = hook_handle
+        self.add_hook(hook_fn, module_str, 'override-'+module_str)
 
     def override(self, module_str, override_tensor):
         """Sets the override tensor for module_str."""
