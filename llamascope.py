@@ -86,6 +86,16 @@ class LlamaScope:
         """Sets the override tensor for module_str."""
         self.override_store[module_str] = override_tensor
 
+    def clear_override(self, module_str):
+        """Clear override hook so it won't affect forward pass."""
+        self.override_store[module_str] = None
+
+    def clear_all_overrides(self):
+        """Clear all override hooks."""
+        overrides = list(self.override_store.keys())
+        for override in overrides:
+            self.clear_override(override)
+
     """Hook clearup"""
     def remove_hook(self, hook_name):
         """Remove a hook with name hook_name from the model."""
