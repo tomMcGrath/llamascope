@@ -1,1 +1,2 @@
 # Code for instrumenting Llama-3
+This repo allows you to instrument a PyTorch model (the main intended use case is Llama-3). Once the model is instrumented, you can retrieve and override activations by using PyTorch hooks. We automatically build a register of all modules in the network, so the approach should generalise beyond Llama-3. We also provide convenience functions for managing hooks.
