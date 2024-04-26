@@ -12,7 +12,6 @@ class LlamaScope:
         self.override_store = {}
         self._build_module_dict()
 
-
     """Module listing."""
     def _build_module_dict(self):
         """Walks the model's module tree and builds a name: module map."""
