@@ -74,7 +74,7 @@ def main(
         # Write activations and clear cache every write_every batches
         if i % write_every == 0 and i > 0:
             all_acts = torch.cat(scope.activations_cache[location])
-            all_toks = torch.cat(toks)
+            all_toks = torch.cat(tokens_cache)
             torch.save(
                 {'activations': all_acts, 'tokens': all_toks},
                 f'activations/{location}-{num_written}.pt'
